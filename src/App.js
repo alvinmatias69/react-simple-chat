@@ -51,6 +51,28 @@ class App extends Component {
     })
   }
 
+  deleteChat() {
+    const { conversations } = this.state;
+    const id = conversations.reduce((acc, cur) => {
+      if (cur.selected) {
+        acc.push(cur.id);
+      }
+      return acc;
+    }, []);
+
+    // call deleting endpoint using id
+    console.log({ id });
+    this.deleteSelected();
+  }
+
+  deleteSelected() {
+    const { conversations } = this.state;
+    this.setState({
+      selecting: false,
+      conversations: conversations.filter(item => !item.selected),
+    });
+  }
+
   renderTrash() {
     const { conversations } = this.state;
     const selectedCount = conversations.reduce((acc, cur) => {
@@ -73,27 +95,6 @@ class App extends Component {
     }
   }
 
-  deleteChat() {
-    const { conversations } = this.state;
-    const id = conversations.reduce((acc, cur) => {
-      if (cur.selected) {
-        acc.push(cur.id);
-      }
-      return acc;
-    }, []);
-
-    // call deleting endpoint using id
-    console.log({ id });
-    this.deleteSelected();
-  }
-
-  deleteSelected() {
-    const { conversations } = this.state;
-    this.setState({
-      selecting: false,
-      conversations: conversations.filter(item => !item.selected),
-    });
-  }
 
   renderEdit() {
     const { selecting } = this.state;
