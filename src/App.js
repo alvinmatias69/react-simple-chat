@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { parseDate } from './lib/date';
 import Balloon from './components/Balloon';
+import Conversation from './data/Conversation';
 
 class App extends Component {
   constructor(props) {
@@ -13,53 +13,37 @@ class App extends Component {
       conversations: [],
       selecting: false,
     };
+
+    this.conversations = new Conversation();
   }
 
   componentDidMount() {
     Axios.get('https://5bb0ae166418d70014071bac.mockapi.io/api/v1/chat')
-         .then(response => this.processData(response.data));
-  }
-
-  processData(data) {
-    const conversations = data.map(item => ({
-      ...item,
-      date: parseDate(item.date),
-      selected: false,
-    }));
-    this.setState({ conversations });
+         .then(response => {
+           this.conversations.process(response.data);
+           const { conversations } = this.conversations;
+           this.setState({ conversations });
+         });
   }
 
   select(id) {
-    const { conversations, selecting } = this.state;
+    const { selecting } = this.state;
     if (selecting) {
-      this.setState({
-        conversations: conversations.map(item => ({
-          ...item,
-          selected: item.id === id ? !item.selected : item.selected,
-        }))
-      })
+      this.conversations.select(id);
+      this.setState({ conversations: this.conversations.conversations });
     }
   }
 
   removeSelected() {
-    const { conversations } = this.state;
+    this.conversations.removeSelected();
     this.setState({
       selecting: false,
-      conversations: conversations.map(item => ({
-        ...item,
-        selected: false,
-      }))
-    })
+      conversations: this.conversations.conversations,
+    });
   }
 
   deleteChat() {
-    const { conversations } = this.state;
-    const id = conversations.reduce((acc, cur) => {
-      if (cur.selected) {
-        acc.push(cur.id);
-      }
-      return acc;
-    }, []);
+    const id = this.conversations.getSelectedId();
 
     // call deleting endpoint using id
     console.log({ id });
@@ -67,21 +51,15 @@ class App extends Component {
   }
 
   deleteSelected() {
-    const { conversations } = this.state;
+    this.conversations.deleteSelected();
     this.setState({
       selecting: false,
-      conversations: conversations.filter(item => !item.selected),
+      conversations: this.conversations.conversations,
     });
   }
 
   renderTrash() {
-    const { conversations } = this.state;
-    const selectedCount = conversations.reduce((acc, cur) => {
-      if (cur.selected) {
-        acc += 1;
-      }
-      return acc;
-    }, 0);
+    const selectedCount = this.conversations.countSelected();
     if (selectedCount > 0) {
       return (
         <FontAwesomeIcon
@@ -95,7 +73,6 @@ class App extends Component {
       )
     }
   }
-
 
   renderEdit() {
     const { selecting } = this.state;
