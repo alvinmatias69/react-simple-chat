@@ -3,6 +3,7 @@ import Axios from 'axios';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { parseDate } from './lib/date';
+import Balloon from './components/Balloon';
 
 class App extends Component {
   constructor(props) {
@@ -134,21 +135,12 @@ class App extends Component {
         </header>
 
         {conversations.map((item, index) => (
-            <div
-              className="Chat-container"
-              style={{
-                justifyContent: item.sent ? 'flex-end' : 'flex-start',
-                backgroundColor: item.selected ? '#54d0f9' : 'transparent',
-                cursor: selecting ? 'pointer' : 'default',
-              }}
-              onClick={() => this.select(item.id)}
-              key={index.toString()}
-            >
-              <div className={"row Balloon " + (item.sent ? "Sent" : "Receive")}>
-                {item.content}
-                <span className="Date-container">{item.date}</span>
-              </div>
-            </div>
+          <Balloon
+            {...item}
+            selecting={selecting}
+            key={index.toString()}
+            onClick={() => this.select(item.id)}
+          />
         ))}
       </div>
     );
