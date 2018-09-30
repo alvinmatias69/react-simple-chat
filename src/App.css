@@ -1,0 +1,68 @@
+.App-container {
+  background-color: #f5f6fb;
+  margin: 0px;
+  max-width: 100vw;
+}
+
+.App-header {
+  background-color: #fd8c2e;
+  padding: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+}
+
+.App-title {
+  font-size: 1.5em;
+  color: white;
+}
+
+.Selector {
+  cursor: pointer;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.Chat-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.Balloon {
+  padding: 15px;
+  border-radius: 15px;
+  border-width: 1px;
+  background-color: white;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  max-width: 40%;
+  color: #4e4e4e;
+  flex-direction: column;
+  font-size: 14pt;
+  border-width: 3px;
+  border-color: #e5e5e5;
+  box-shadow: 2px 2px #bbbbbb;
+}
+
+.Sent {
+  border-top-right-radius: 0px;
+  background-color: #fff1e2;
+}
+
+.Receive {
+  border-top-left-radius: 0px;
+}
+
+.Date-container {
+  text-align: right;
+  right: 0px;
+  font-size: 10pt;
+  color: #bbbbbb;
+}
